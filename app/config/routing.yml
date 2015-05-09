@@ -1,0 +1,3 @@
+augwa_short_url:
+    resource: "@AugwaShortUrlBundle/Resources/config/routing.yml"
+    prefix:   /
