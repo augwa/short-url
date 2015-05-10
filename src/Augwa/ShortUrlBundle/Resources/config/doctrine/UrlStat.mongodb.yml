@@ -1,0 +1,16 @@
+Augwa\ShortUrlBundle\Document\UrlStat:
+    fields:
+        urlStatId:
+            type: id
+            id: true
+        ipAddress:
+            type: int
+        country:
+            type: string
+        userAgent:
+            type: string
+        dateCreated:
+            type: timestamp
+    referenceOne:
+        url:
+            targetDocument: Url
