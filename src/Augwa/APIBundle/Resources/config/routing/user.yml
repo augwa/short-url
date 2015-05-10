@@ -12,22 +12,22 @@ AugwaAPI_User_Read:
     methods:
         - GET
     requirements:
-        user_id: \d+
+        user_id: '\d+'
 
 AugwaAPI_User_Update:
-    path: '/user/{code}'
+    path: '/user/{user_id}'
     defaults:
         _controller: 'AugwaAPIBundle:User:update'
     methods:
         - PUT
     requirements:
-        user_id: \d+
+        user_id: '\d+'
 
 AugwaAPI_User_Delete:
-    path: '/user/{code}'
+    path: '/user/{user_id}'
     defaults:
         _controller: 'AugwaAPIBundle:User:delete'
     methods:
         - DELETE
     requirements:
-        user_id: \d+
+        user_id: '\d+'
