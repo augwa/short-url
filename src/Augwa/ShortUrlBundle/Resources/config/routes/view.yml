@@ -1,6 +1,0 @@
-AugwaShortUrl_View_Home:
-    path: '/'
-    defaults:
-        _controller: 'AugwaShortUrlBundle:View:home'
-    methods:
-        - GET

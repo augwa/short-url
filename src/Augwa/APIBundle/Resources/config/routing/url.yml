@@ -1,0 +1,31 @@
+AugwaAPI_Url_Create:
+    path: '/url'
+    defaults:
+        _controller: 'AugwaAPIBundle:Url:create'
+    methods:
+        - POST
+
+AugwaAPI_Url_Read:
+    path: '/url/{url_id}'
+    defaults:
+        _controller: 'AugwaAPIBundle:Url:read'
+    methods:
+        - GET
+    requirements:
+        url_id: [a-zA-Z0-9]
+
+AugwaAPI_Url_Delete:
+    path: '/url/{url_id}'
+    defaults:
+        _controller: 'AugwaAPIBundle:Url:delete'
+    methods:
+        - DELETE
+    requirements:
+        url_id: [a-zA-Z0-9]
+
+AugwaAPI_Url_List:
+    path: '/url'
+    defaults:
+        _controller: 'AugwaAPIBundle:Url:list'
+    methods:
+        - GET

@@ -1,0 +1,9 @@
+AugwaAPI_User_Session_Delete:
+    path: '/user/{user_id}/session/{session_id}'
+    defaults:
+        _controller: 'AugwaAPIBundle:UserSession:delete'
+    methods:
+        - DELETE
+    requirements:
+        user_id: \d+
+        session_id: [a-zA-Z0-9]
