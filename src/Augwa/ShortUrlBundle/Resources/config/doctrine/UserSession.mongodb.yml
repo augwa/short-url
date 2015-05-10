@@ -1,0 +1,12 @@
+Augwa\ShortUrlBundle\Document\UserSession:
+    fields:
+        userSessionId:
+            type: id
+            id: true
+        ipAddress:
+            type: int
+        dateCreated:
+            type: timestamp
+    referenceOne:
+        user:
+            targetDocument: User

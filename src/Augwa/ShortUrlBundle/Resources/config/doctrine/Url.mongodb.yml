@@ -1,0 +1,19 @@
+Augwa\ShortUrlBundle\Document\Url:
+    type: document
+    fields:
+        urlId:
+            type: id
+            id: true
+        url:
+            type: string
+        title:
+            type: string
+        description:
+            type: string
+        ipAddress:
+            type: int
+        dateCreated:
+            type: timestamp
+    referenceOne:
+        user:
+            targetDocument: User
