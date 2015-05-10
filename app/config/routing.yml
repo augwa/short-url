@@ -1,3 +1,7 @@
+augwa_api:
+    resource: "@AugwaAPIBundle/Resources/config/routing.yml"
+    prefix:   /api
+
 augwa_short_url:
     resource: "@AugwaShortUrlBundle/Resources/config/routing.yml"
     prefix:   /

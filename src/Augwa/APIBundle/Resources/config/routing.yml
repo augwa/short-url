@@ -1,0 +1,11 @@
+AugwaAPI_Url:
+    resource: "@AugwaAPIBundle/Resources/config/routing/url.yml"
+
+AugwaAPI_UrlStat:
+    resource: "@AugwaAPIBundle/Resources/config/routing/url/stat.yml"
+
+AugwaAPI_User:
+    resource: "@AugwaAPIBundle/Resources/config/routing/user.yml"
+
+AugwaAPI_UserSession:
+    resource: "@AugwaAPIBundle/Resources/config/routing/user/session.yml"

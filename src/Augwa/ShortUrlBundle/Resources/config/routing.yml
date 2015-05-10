@@ -1,9 +1,15 @@
-AugwaShortUrl_ShortUrl:
-    resource: "@AugwaShortUrlBundle/Resources/config/routes/short-url.yml"
+AugwaShortUrl_View_Home:
+    path: '/'
+    defaults:
+        _controller: 'AugwaShortUrlBundle:View:home'
+    methods:
+        - GET
 
-AugwaShortUrl_View:
-    resource: "@AugwaShortUrlBundle/Resources/config/routes/view.yml"
-
-AugwaShortUrl_API:
-    resource: "@AugwaShortUrlBundle/Resources/config/routes/api.yml"
-    prefix: /api
+AugwaShortUrl_ShortUrl_Code:
+    path: '/{code}'
+    defaults:
+        _controller: 'AugwaShortUrlBundle:ShortUrl:redirect'
+    methods:
+        - GET
+    requirements:
+        code: [a-zA-Z0-9]

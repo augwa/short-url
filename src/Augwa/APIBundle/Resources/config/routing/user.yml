@@ -1,0 +1,33 @@
+AugwaAPI_User_Create:
+    path: '/user'
+    defaults:
+        _controller: 'AugwaAPIBundle:User:create'
+    methods:
+        - POST
+
+AugwaAPI_User_Read:
+    path: '/user/{user_id}'
+    defaults:
+        _controller: 'AugwaAPIBundle:User:read'
+    methods:
+        - GET
+    requirements:
+        user_id: \d+
+
+AugwaAPI_User_Update:
+    path: '/user/{code}'
+    defaults:
+        _controller: 'AugwaAPIBundle:User:update'
+    methods:
+        - PUT
+    requirements:
+        user_id: \d+
+
+AugwaAPI_User_Delete:
+    path: '/user/{code}'
+    defaults:
+        _controller: 'AugwaAPIBundle:User:delete'
+    methods:
+        - DELETE
+    requirements:
+        user_id: \d+
