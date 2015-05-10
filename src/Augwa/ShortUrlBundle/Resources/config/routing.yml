@@ -1,1 +1,9 @@
+AugwaShortUrl_ShortUrl:
+    resource: "@AugwaShortUrlBundle/Resources/config/routes/short-url.yml"
 
+AugwaShortUrl_View:
+    resource: "@AugwaShortUrlBundle/Resources/config/routes/view.yml"
+
+AugwaShortUrl_API:
+    resource: "@AugwaShortUrlBundle/Resources/config/routes/api.yml"
+    prefix: /api

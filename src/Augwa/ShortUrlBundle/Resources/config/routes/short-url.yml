@@ -1,0 +1,8 @@
+AugwaShortUrl_ShortUrl_Code:
+    path: '/{code}'
+    defaults:
+        _controller: 'AugwaShortUrlBundle:ShortUrl:redirect'
+    methods:
+        - GET
+    requirements:
+        code: [a-zA-Z0-9]
