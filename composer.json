@@ -28,7 +28,8 @@
         "doctrine/doctrine-fixtures-bundle": "~2.2",
         "doctrine/mongodb": "~1.1",
         "doctrine/mongodb-odm": "~1.0@beta",
-        "doctrine/mongodb-odm-bundle": "~3.0@beta"
+        "doctrine/mongodb-odm-bundle": "~3.0@beta",
+        "geoip2/geoip2": "~2.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
