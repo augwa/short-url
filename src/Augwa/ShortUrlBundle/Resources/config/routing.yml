@@ -12,4 +12,4 @@ AugwaShortUrl_ShortUrl_Code:
     methods:
         - GET
     requirements:
-        code: [a-zA-Z0-9]
+        code: '[a-zA-Z0-9]'

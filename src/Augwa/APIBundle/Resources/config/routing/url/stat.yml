@@ -5,4 +5,4 @@ AugwaAPI_Url_Stat_Read:
     methods:
         - GET
     requirements:
-        url_id: [a-zA-Z0-9]
+        url_id: '[a-zA-Z0-9]'
