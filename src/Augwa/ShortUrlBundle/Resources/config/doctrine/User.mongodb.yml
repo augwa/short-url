@@ -5,6 +5,7 @@ Augwa\ShortUrlBundle\Document\User:
             id: true
         emailAddress:
             type: string
+            unique: true
         password:
             type: string
         salt:

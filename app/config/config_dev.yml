@@ -53,7 +53,7 @@ doctrine_mongodb:
             server: mongodb://localhost:27017
             options:
                 connect: true
-    default_database: short_url
+    default_database: shorturl
     document_managers:
         default:
             auto_mapping: true
