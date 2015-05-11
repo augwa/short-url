@@ -12,7 +12,7 @@ AugwaAPI_User_Read:
     methods:
         - GET
     requirements:
-        user_id: '\d+'
+        user_id: '^[a-zA-Z0-9]+$'
 
 AugwaAPI_User_Update:
     path: '/user/{user_id}'
@@ -21,7 +21,7 @@ AugwaAPI_User_Update:
     methods:
         - PUT
     requirements:
-        user_id: '\d+'
+        user_id: '^[a-zA-Z0-9]+$'
 
 AugwaAPI_User_Delete:
     path: '/user/{user_id}'
@@ -30,4 +30,4 @@ AugwaAPI_User_Delete:
     methods:
         - DELETE
     requirements:
-        user_id: '\d+'
+        user_id: '^[a-zA-Z0-9]+$'
