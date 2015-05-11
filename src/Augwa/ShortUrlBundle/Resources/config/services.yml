@@ -1,1 +1,10 @@
 services:
+
+    Augwa.ShortURL.User.Factory:
+        class: Augwa\ShortUrlBundle\Controller\UserFactoryController
+
+    Augwa.ShortURL.User:
+        class: Augwa\ShortUrlBundle\Controller\UserController
+        factory: ["@Augwa.ShortURL.User.Factory", createUser]
+        arguments:
+            - '@service_container'

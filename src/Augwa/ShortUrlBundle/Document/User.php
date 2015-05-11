@@ -29,9 +29,21 @@ class User
 
 
     /**
+     * Set userId
+     *
+     * @param string $userId
+     * @return self
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+        return $this;
+    }
+
+    /**
      * Get userId
      *
-     * @return id $userId
+     * @return string $userId
      */
     public function getUserId()
     {
@@ -129,7 +141,7 @@ class User
     /**
      * Set dateCreated
      *
-     * @param timestamp $dateCreated
+     * @param int $dateCreated
      * @return self
      */
     public function setDateCreated($dateCreated)
@@ -141,7 +153,7 @@ class User
     /**
      * Get dateCreated
      *
-     * @return timestamp $dateCreated
+     * @return int $dateCreated
      */
     public function getDateCreated()
     {
