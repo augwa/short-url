@@ -12,7 +12,7 @@ AugwaAPI_Url_Read:
     methods:
         - GET
     requirements:
-        url_id: '[a-zA-Z0-9]'
+        url_id: '^[a-zA-Z0-9]+$'
 
 AugwaAPI_Url_Delete:
     path: '/url/{url_id}'
@@ -21,7 +21,7 @@ AugwaAPI_Url_Delete:
     methods:
         - DELETE
     requirements:
-        url_id: '[a-zA-Z0-9]'
+        url_id: '^[a-zA-Z0-9]+$'
 
 AugwaAPI_Url_List:
     path: '/url'
