@@ -19,7 +19,7 @@ class ExceptionController extends Base\BaseController
 
         $exceptionClass = $exception->getClass();
 
-        $unknownException = false === strpos($exceptionClass, "/Augwa\\\\APIBundle\\\\Exception/");
+        $unknownException = false === strpos($exceptionClass, 'Augwa\APIBundle\Exception');
 
         $statusCode = $this->determineStatusCode($exceptionClass);
 

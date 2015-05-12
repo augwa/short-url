@@ -30,7 +30,8 @@ class ViewController extends Base\BaseViewController
      * @param Request $request
      *
      * @return RedirectResponse
-     * @throws \Augwa\APIBundle\Exception\User\NotFoundException
+     *
+     * @throws APIException\Url\NotFoundException
      */
     public function redirectAction(Request $request)
     {
@@ -40,8 +41,8 @@ class ViewController extends Base\BaseViewController
         try {
             $url->loadById($url->getWebId($request->get('url_code')));
         }
-        catch (ShortUrlException\User\NotFoundException $e) {
-            throw new APIException\User\NotFoundException($e->getMessage(), $e->getCode(), $e);
+        catch (ShortUrlException\Url\NotFoundException $e) {
+            throw new APIException\Url\NotFoundException($e->getMessage(), $e->getCode(), $e);
         }
 
         /** @var $urlStat UrlStatController */

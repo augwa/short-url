@@ -341,7 +341,7 @@ class UrlController extends Base\BaseController
         );
 
         if ($url === null) {
-            throw new Exception\Url\NotFoundException(sprintf('url with id "%s" was not found', $id));
+            throw new Exception\Url\NotFoundException(sprintf('url with id "%s" was not found', $this->base62_encode($id)));
         }
 
         return $url;
