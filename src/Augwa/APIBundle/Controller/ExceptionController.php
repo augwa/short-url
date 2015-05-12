@@ -5,7 +5,6 @@ namespace Augwa\APIBundle\Controller;
 
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 use Augwa\APIBundle\Exception\StatusCode;
 
 /**
@@ -15,168 +14,202 @@ use Augwa\APIBundle\Exception\StatusCode;
 class ExceptionController extends Base\BaseController
 {
 
-    public function showExceptionAction(FlattenException $exception, $logger = null)
+    public function showExceptionAction(FlattenException $exception)
     {
-        if ($logger !== null && false === $logger instanceof DebugLoggerInterface) {
-            exit;
-        }
 
         $exceptionClass = $exception->getClass();
-        $statusCode = $this->determineStatusCode(new $exceptionClass);
-        $expiryDate = new \DateTime('2000-01-01');
 
-        $content = json_encode(
-            [
-                'message' => $exception->getMessage(),
-                'code' => $statusCode
-            ]
+        $unknownException = false === strpos($exceptionClass, "/Augwa\\\\APIBundle\\\\Exception/");
+
+        $statusCode = $this->determineStatusCode($exceptionClass);
+
+        /**
+         * will convert "\Augwa\SomeBundle\Exception\SomeProblemException" to "some_problem_exception"
+         */
+        $pos = strrpos($exceptionClass, '\\');
+        $exceptionName = strtolower(
+            preg_replace(
+                '/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/',
+                '$1_$2',
+                substr($exceptionClass, $pos !== false ? $pos+1 : 0)
+            )
         );
 
-        $response = new Response;
+        $content = [
+            'code' => $statusCode,
+            'exception' => $exceptionName,
+            'message' => $exception->getMessage(),
+        ];
 
-        $response->setMaxAge(0);
-        $response->setSharedMaxAge(0);
-        $response->setExpires($expiryDate);
-        $response->setContent($content);
-        $response->setStatusCode($statusCode);
+        if ($unknownException || ($statusCode >= 500 && $statusCode <= 599 && false === in_array($statusCode, [ 501 ]))) {
 
-        $response->headers->addCacheControlDirective('must-revalidate', true);
-        $response->headers->set('Content-Type', 'application/json');
+            $referenceId = md5(time() . rand());
 
-        return $response;
+            $root = $this->container->getParameter('augwa.api.exception_location');
+            $errorFolder = sprintf('%s/%s/%s/%s/%s', $root, $referenceId[0], $referenceId[1], $referenceId[2], $referenceId[3]);
+
+            if (false === file_exists($errorFolder)) {
+                mkdir($errorFolder, 0770, true);
+            }
+
+            $error = [
+                'code' => $statusCode,
+                'reference_id' => $referenceId,
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+                'error' => [
+                    'reason' => 'fatal_exception',
+                    'message' => $exception->getMessage(),
+                    'trace' => debug_backtrace(0, 100)
+                ]
+            ];
+
+            file_put_contents(
+                sprintf('%s/%s.%s.json', $errorFolder, $referenceId, time()),
+                json_encode($error, JSON_PRETTY_PRINT)
+            );
+
+            $content['reference_id'] = $referenceId;
+
+        }
+
+        return $this->responseBuilder(json_encode($content), $statusCode);
     }
 
     /**
-     * @param \Exception $exception
+     * @param string $exceptionClass
      *
      * @return int
      */
-    private function determineStatusCode(\Exception $exception)
+    private function determineStatusCode($exceptionClass)
     {
         /**
          * default to error 500, override based on exception
          */
         $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
+        $prefix = '\Augwa\APIBundle\Exception\StatusCode';
+        $clientPrefix = $prefix . '\ClientError';
+        $serverPrefix = $prefix . '\ServerError';
 
         /**
          * Client Errors
          */
-        if ($exception instanceof StatusCode\ClientError\BadRequest) {
+        if (is_subclass_of($exceptionClass, $clientPrefix . '\BadRequest')) {
             $statusCode = Response::HTTP_BAD_REQUEST;
         }
-        elseif ($exception instanceof StatusCode\ClientError\Unauthorized) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\Unauthorized')) {
             $statusCode = Response::HTTP_UNAUTHORIZED;
         }
-        elseif ($exception instanceof StatusCode\ClientError\PaymentRequired) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\PaymentRequired')) {
             $statusCode = Response::HTTP_PAYMENT_REQUIRED;
         }
-        elseif ($exception instanceof StatusCode\ClientError\Forbidden) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\Forbidden')) {
             $statusCode = Response::HTTP_FORBIDDEN;
         }
-        elseif ($exception instanceof StatusCode\ClientError\NotFound) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\NotFound')) {
             $statusCode = Response::HTTP_NOT_FOUND;
         }
-        elseif ($exception instanceof StatusCode\ClientError\MethodNotAllowed) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\MethodNotAllowed')) {
             $statusCode = Response::HTTP_METHOD_NOT_ALLOWED;
         }
-        elseif ($exception instanceof StatusCode\ClientError\NotAcceptable) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\NotAcceptable')) {
             $statusCode = Response::HTTP_NOT_ACCEPTABLE;
         }
-        elseif ($exception instanceof StatusCode\ClientError\ProxyAuthenticationRequired) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\ProxyAuthenticationRequired')) {
             $statusCode = Response::HTTP_PROXY_AUTHENTICATION_REQUIRED;
         }
-        elseif ($exception instanceof StatusCode\ClientError\RequestTimeout) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\RequestTimeout')) {
             $statusCode = Response::HTTP_REQUEST_TIMEOUT;
         }
-        elseif ($exception instanceof StatusCode\ClientError\Conflict) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\Conflict')) {
             $statusCode = Response::HTTP_CONFLICT;
         }
-        elseif ($exception instanceof StatusCode\ClientError\Gone) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\Gone')) {
             $statusCode = Response::HTTP_GONE;
         }
-        elseif ($exception instanceof StatusCode\ClientError\LengthRequired) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\LengthRequired')) {
             $statusCode = Response::HTTP_LENGTH_REQUIRED;
         }
-        elseif ($exception instanceof StatusCode\ClientError\PreconditionFailed) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\PreconditionFailed')) {
             $statusCode = Response::HTTP_PRECONDITION_FAILED;
         }
-        elseif ($exception instanceof StatusCode\ClientError\RequestEntityTooLarge) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\RequestEntityTooLarge')) {
             $statusCode = Response::HTTP_REQUEST_ENTITY_TOO_LARGE;
         }
-        elseif ($exception instanceof StatusCode\ClientError\RequestUriTooLong) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\RequestUriTooLong')) {
             $statusCode = Response::HTTP_REQUEST_URI_TOO_LONG;
         }
-        elseif ($exception instanceof StatusCode\ClientError\UnsupportedMediaType) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\UnsupportedMediaType')) {
             $statusCode = Response::HTTP_UNSUPPORTED_MEDIA_TYPE;
         }
-        elseif ($exception instanceof StatusCode\ClientError\RequestedRangeNotSatisfiable) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\RequestedRangeNotSatisfiable')) {
             $statusCode = Response::HTTP_REQUESTED_RANGE_NOT_SATISFIABLE;
         }
-        elseif ($exception instanceof StatusCode\ClientError\ExpectationFailed) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\ExpectationFailed')) {
             $statusCode = Response::HTTP_EXPECTATION_FAILED;
         }
-        elseif ($exception instanceof StatusCode\ClientError\IAmATeapot) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\IAmATeapot')) {
             $statusCode = Response::HTTP_I_AM_A_TEAPOT;
         }
-        elseif ($exception instanceof StatusCode\ClientError\UnprocessableEntity) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\UnprocessableEntity')) {
             $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
         }
-        elseif ($exception instanceof StatusCode\ClientError\Locked) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\Locked')) {
             $statusCode = Response::HTTP_LOCKED;
         }
-        elseif ($exception instanceof StatusCode\ClientError\FailedDependency) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\FailedDependency')) {
             $statusCode = Response::HTTP_FAILED_DEPENDENCY;
         }
-        elseif ($exception instanceof StatusCode\ClientError\ReservedForWebdavAdvancedCollectionsExpiredProposal) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\ReservedForWebdavAdvancedCollectionsExpiredProposal')) {
             $statusCode = Response::HTTP_RESERVED_FOR_WEBDAV_ADVANCED_COLLECTIONS_EXPIRED_PROPOSAL;
         }
-        elseif ($exception instanceof StatusCode\ClientError\UpgradeRequired) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\UpgradeRequired')) {
             $statusCode = Response::HTTP_UPGRADE_REQUIRED;
         }
-        elseif ($exception instanceof StatusCode\ClientError\PreconditionRequired) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\PreconditionRequired')) {
             $statusCode = Response::HTTP_PRECONDITION_REQUIRED;
         }
-        elseif ($exception instanceof StatusCode\ClientError\TooManyRequests) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\TooManyRequests')) {
             $statusCode = Response::HTTP_TOO_MANY_REQUESTS;
         }
-        elseif ($exception instanceof StatusCode\ClientError\RequestHeaderFieldsTooLarge) {
+        elseif (is_subclass_of($exceptionClass, $clientPrefix . '\RequestHeaderFieldsTooLarge')) {
             $statusCode = Response::HTTP_REQUEST_HEADER_FIELDS_TOO_LARGE;
         }
 
         /**
          * Server Errors
          */
-        elseif ($exception instanceof StatusCode\ServerError\InternalServerError) {
+        elseif (is_subclass_of($exceptionClass, $serverPrefix . '\InternalServerError')) {
             $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
-        elseif ($exception instanceof StatusCode\ServerError\NotImplemented) {
+        elseif (is_subclass_of($exceptionClass, $serverPrefix . '\NotImplemented')) {
             $statusCode = Response::HTTP_NOT_IMPLEMENTED;
         }
-        elseif ($exception instanceof StatusCode\ServerError\BadGateway) {
+        elseif (is_subclass_of($exceptionClass, $serverPrefix . '\BadGateway')) {
             $statusCode = Response::HTTP_BAD_GATEWAY;
         }
-        elseif ($exception instanceof StatusCode\ServerError\ServiceUnavailable) {
+        elseif (is_subclass_of($exceptionClass, $serverPrefix . '\ServiceUnavailable')) {
             $statusCode = Response::HTTP_SERVICE_UNAVAILABLE;
         }
-        elseif ($exception instanceof StatusCode\ServerError\GatewayTimeout) {
+        elseif (is_subclass_of($exceptionClass, $serverPrefix . '\GatewayTimeout')) {
             $statusCode = Response::HTTP_GATEWAY_TIMEOUT;
         }
-        elseif ($exception instanceof StatusCode\ServerError\HttpVersionNotSupported) {
+        elseif (is_subclass_of($exceptionClass, $serverPrefix . '\HttpVersionNotSupported')) {
             $statusCode = Response::HTTP_VERSION_NOT_SUPPORTED;
         }
-        elseif ($exception instanceof StatusCode\ServerError\VariantAlsoNegotiatesExperimental) {
+        elseif (is_subclass_of($exceptionClass, $serverPrefix . '\VariantAlsoNegotiatesExperimental')) {
             $statusCode = Response::HTTP_VARIANT_ALSO_NEGOTIATES_EXPERIMENTAL;
         }
-        elseif ($exception instanceof StatusCode\ServerError\InsufficientStorage) {
+        elseif (is_subclass_of($exceptionClass, $serverPrefix . '\InsufficientStorage')) {
             $statusCode = Response::HTTP_INSUFFICIENT_STORAGE;
         }
-        elseif ($exception instanceof StatusCode\ServerError\LoopDetected) {
+        elseif (is_subclass_of($exceptionClass, $serverPrefix . '\LoopDetected')) {
             $statusCode = Response::HTTP_LOOP_DETECTED;
         }
-        elseif ($exception instanceof StatusCode\ServerError\NotExtended) {
+        elseif (is_subclass_of($exceptionClass, $serverPrefix . '\NotExtended')) {
             $statusCode = Response::HTTP_NOT_EXTENDED;
         }
-        elseif ($exception instanceof StatusCode\ServerError\NetworkAuthenticationRequired) {
+        elseif (is_subclass_of($exceptionClass, $serverPrefix . '\NetworkAuthenticationRequired')) {
             $statusCode = Response::HTTP_NETWORK_AUTHENTICATION_REQUIRED;
         }
 

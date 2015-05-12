@@ -6,10 +6,10 @@ AugwaShortUrl_View_Home:
         - GET
 
 AugwaShortUrl_ShortUrl_Code:
-    path: '/{url_id}'
+    path: '/{url_code}'
     defaults:
         _controller: 'AugwaShortUrlBundle:View:redirect'
     methods:
         - GET
     requirements:
-        url_id: '^[a-zA-Z0-9]+$'
+        url_code: '^[a-zA-Z0-9]+$'

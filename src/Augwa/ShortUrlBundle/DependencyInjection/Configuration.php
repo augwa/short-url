@@ -20,9 +20,18 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('augwa_short_url');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+                ->arrayNode('geoip2')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('database_location')
+                            ->defaultValue('%kernel.root_dir%/../data/geoip2/GeoLite2-Country.mmdb')
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ->addDefaultsIfNotSet()->end();
 
         return $treeBuilder;
     }

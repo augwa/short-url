@@ -4,6 +4,7 @@ Augwa\ShortUrlBundle\Document\Url:
         urlId:
             type: id
             id: true
+            strategy: increment
         url:
             type: string
         title:

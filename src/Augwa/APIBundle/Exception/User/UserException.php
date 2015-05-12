@@ -3,7 +3,6 @@
 namespace Augwa\APIBundle\Exception\User;
 
 use Augwa\APIBundle\Exception\Exception;
-use Augwa\APIBundle\Exception\StatusCode\ClientError\BadRequest;
 
 /**
  * Class UserException

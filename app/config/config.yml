@@ -72,3 +72,14 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+augwa_api:
+    authentication_routes:
+        - AugwaAPI_Url_Stat_Read
+        - AugwaAPI_Url_Read
+        - AugwaAPI_Url_Delete
+        - AugwaAPI_Url_List
+        - AugwaAPI_Url_Stat_Read
+        - AugwaAPI_User_Read
+        - AugwaAPI_User_Update
+        - AugwaAPI_User_Delete

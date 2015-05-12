@@ -22,6 +22,9 @@ class AugwaAPIExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        $container->setParameter('augwa.api.exception_location', $config['exception_location']);
+        $container->setParameter('augwa.api.authentication_routes', $config['authentication_routes']);
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }

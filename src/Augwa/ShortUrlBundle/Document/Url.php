@@ -6,10 +6,10 @@ namespace Augwa\ShortUrlBundle\Document;
  * Class Url
  * @package Augwa\ShortUrlBundle\Document
  */
-class Url
+class Url extends Base\BaseDocument
 {
 
-    /** @var int */
+    /** @var \MongoId */
     protected $urlId;
 
     /** @var string */
@@ -27,14 +27,11 @@ class Url
     /** @var int */
     protected $ipAddress;
 
-    /** @var \DateTime */
+    /** @var \MongoTimestamp */
     protected $dateCreated;
 
-
     /**
-     * Get urlId
-     *
-     * @return id $urlId
+     * @return \MongoInt64
      */
     public function getUrlId()
     {
@@ -42,10 +39,8 @@ class Url
     }
 
     /**
-     * Set url
-     *
      * @param string $url
-     * @return self
+     * @return $this
      */
     public function setUrl($url)
     {
@@ -54,9 +49,7 @@ class Url
     }
 
     /**
-     * Get url
-     *
-     * @return string $url
+     * @return string
      */
     public function getUrl()
     {
@@ -64,10 +57,8 @@ class Url
     }
 
     /**
-     * Set title
-     *
      * @param string $title
-     * @return self
+     * @return $this
      */
     public function setTitle($title)
     {
@@ -76,9 +67,7 @@ class Url
     }
 
     /**
-     * Get title
-     *
-     * @return string $title
+     * @return string
      */
     public function getTitle()
     {
@@ -86,10 +75,8 @@ class Url
     }
 
     /**
-     * Set description
-     *
      * @param string $description
-     * @return self
+     * @return $this
      */
     public function setDescription($description)
     {
@@ -98,9 +85,7 @@ class Url
     }
 
     /**
-     * Get description
-     *
-     * @return string $description
+     * @return string
      */
     public function getDescription()
     {
@@ -108,10 +93,8 @@ class Url
     }
 
     /**
-     * Set ipAddress
-     *
      * @param int $ipAddress
-     * @return self
+     * @return $this
      */
     public function setIpAddress($ipAddress)
     {
@@ -120,9 +103,7 @@ class Url
     }
 
     /**
-     * Get ipAddress
-     *
-     * @return int $ipAddress
+     * @return int
      */
     public function getIpAddress()
     {
@@ -130,10 +111,8 @@ class Url
     }
 
     /**
-     * Set dateCreated
-     *
-     * @param timestamp $dateCreated
-     * @return self
+     * @param \MongoTimestamp $dateCreated
+     * @return $this
      */
     public function setDateCreated($dateCreated)
     {
@@ -142,9 +121,7 @@ class Url
     }
 
     /**
-     * Get dateCreated
-     *
-     * @return timestamp $dateCreated
+     * @return \MongoTimestamp
      */
     public function getDateCreated()
     {
@@ -152,10 +129,8 @@ class Url
     }
 
     /**
-     * Set user
-     *
      * @param User $user
-     * @return self
+     * @return $this
      */
     public function setUser(User $user)
     {
@@ -164,12 +139,11 @@ class Url
     }
 
     /**
-     * Get user
-     *
-     * @return User $user
+     * @return User
      */
     public function getUser()
     {
         return $this->user;
     }
+
 }

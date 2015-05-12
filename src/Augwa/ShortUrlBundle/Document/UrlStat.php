@@ -6,10 +6,10 @@ namespace Augwa\ShortUrlBundle\Document;
  * Class UrlStat
  * @package Augwa\ShortUrlBundle\Document
  */
-class UrlStat
+class UrlStat extends Base\BaseDocument
 {
 
-    /** @var int */
+    /** @var \MongoId */
     protected $urlStatId;
 
     /** @var Url */
@@ -24,14 +24,12 @@ class UrlStat
     /** @var string */
     protected $userAgent;
 
-    /** @var \DateTime */
+    /** @var \MongoTimestamp */
     protected $dateCreated;
 
 
     /**
-     * Get urlStatId
-     *
-     * @return id $urlStatId
+     * @return \MongoId
      */
     public function getUrlStatId()
     {
@@ -39,10 +37,8 @@ class UrlStat
     }
 
     /**
-     * Set ipAddress
-     *
      * @param int $ipAddress
-     * @return self
+     * @return $this
      */
     public function setIpAddress($ipAddress)
     {
@@ -51,9 +47,7 @@ class UrlStat
     }
 
     /**
-     * Get ipAddress
-     *
-     * @return int $ipAddress
+     * @return int
      */
     public function getIpAddress()
     {
@@ -61,10 +55,8 @@ class UrlStat
     }
 
     /**
-     * Set country
-     *
      * @param string $country
-     * @return self
+     * @return $this
      */
     public function setCountry($country)
     {
@@ -73,9 +65,7 @@ class UrlStat
     }
 
     /**
-     * Get country
-     *
-     * @return string $country
+     * @return string
      */
     public function getCountry()
     {
@@ -83,10 +73,8 @@ class UrlStat
     }
 
     /**
-     * Set userAgent
-     *
      * @param string $userAgent
-     * @return self
+     * @return $this
      */
     public function setUserAgent($userAgent)
     {
@@ -95,9 +83,7 @@ class UrlStat
     }
 
     /**
-     * Get userAgent
-     *
-     * @return string $userAgent
+     * @return string
      */
     public function getUserAgent()
     {
@@ -105,10 +91,8 @@ class UrlStat
     }
 
     /**
-     * Set dateCreated
-     *
-     * @param timestamp $dateCreated
-     * @return self
+     * @param \MongoTimestamp $dateCreated
+     * @return $this
      */
     public function setDateCreated($dateCreated)
     {
@@ -117,9 +101,7 @@ class UrlStat
     }
 
     /**
-     * Get dateCreated
-     *
-     * @return timestamp $dateCreated
+     * @return \MongoTimestamp
      */
     public function getDateCreated()
     {
@@ -127,10 +109,8 @@ class UrlStat
     }
 
     /**
-     * Set url
-     *
      * @param Url $url
-     * @return self
+     * @return $this
      */
     public function setUrl(Url $url)
     {
@@ -139,9 +119,7 @@ class UrlStat
     }
 
     /**
-     * Get url
-     *
-     * @return Url $url
+     * @return Url
      */
     public function getUrl()
     {

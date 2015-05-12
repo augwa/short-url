@@ -1,8 +1,8 @@
 AugwaAPI_Url_Stat_Read:
-    path: /url/{url_id}/stats
+    path: /url/{url_code}/stats
     defaults:
         _controller: 'AugwaAPIBundle:UrlStat:read'
     methods:
         - GET
     requirements:
-        url_id: '^[a-zA-Z0-9]+$'
+        url_code: '^[a-zA-Z0-9]+$'

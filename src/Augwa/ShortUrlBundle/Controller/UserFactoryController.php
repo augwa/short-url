@@ -2,18 +2,20 @@
 
 namespace Augwa\ShortUrlBundle\Controller;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 /**
  * Class UserFactoryController
  * @package Augwa\ShortUrlBundle\Controller
  */
-class UserFactoryController {
+class UserFactoryController extends FactoryController
+{
 
-    public static function createUser(ContainerInterface $container)
+    /**
+     * @return UserController
+     */
+    public function make()
     {
         $user = new UserController;
-        $user->setContainer($container);
+        $user->setContainer($this->container);
         return $user;
     }
 

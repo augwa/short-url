@@ -6,6 +6,3 @@ AugwaAPI_UrlStat:
 
 AugwaAPI_User:
     resource: "@AugwaAPIBundle/Resources/config/routing/user.yml"
-
-AugwaAPI_UserSession:
-    resource: "@AugwaAPIBundle/Resources/config/routing/user/session.yml"

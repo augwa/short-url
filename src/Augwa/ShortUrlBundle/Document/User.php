@@ -6,10 +6,10 @@ namespace Augwa\ShortUrlBundle\Document;
  * Class User
  * @package Augwa\ShortUrlBundle\Document
  */
-class User
+class User extends Base\BaseDocument
 {
 
-    /** @var int */
+    /** @var \MongoId */
     protected $userId;
 
     /** @var string */
@@ -24,15 +24,13 @@ class User
     /** @var int */
     protected $ipAddress;
 
-    /** @var \DateTime */
+    /** @var \MongoTimestamp */
     protected $dateCreated;
 
 
     /**
-     * Set userId
-     *
-     * @param string $userId
-     * @return self
+     * @param \MongoId $userId
+     * @return $this
      */
     public function setUserId($userId)
     {
@@ -41,9 +39,7 @@ class User
     }
 
     /**
-     * Get userId
-     *
-     * @return string $userId
+     * @return \MongoId
      */
     public function getUserId()
     {
@@ -51,10 +47,8 @@ class User
     }
 
     /**
-     * Set emailAddress
-     *
      * @param string $emailAddress
-     * @return self
+     * @return $this
      */
     public function setEmailAddress($emailAddress)
     {
@@ -63,9 +57,7 @@ class User
     }
 
     /**
-     * Get emailAddress
-     *
-     * @return string $emailAddress
+     * @return string
      */
     public function getEmailAddress()
     {
@@ -73,10 +65,8 @@ class User
     }
 
     /**
-     * Set password
-     *
      * @param string $password
-     * @return self
+     * @return $this
      */
     public function setPassword($password)
     {
@@ -85,9 +75,7 @@ class User
     }
 
     /**
-     * Get password
-     *
-     * @return string $password
+     * @return string
      */
     public function getPassword()
     {
@@ -95,10 +83,8 @@ class User
     }
 
     /**
-     * Set salt
-     *
      * @param string $salt
-     * @return self
+     * @return $this
      */
     public function setSalt($salt)
     {
@@ -107,9 +93,7 @@ class User
     }
 
     /**
-     * Get salt
-     *
-     * @return string $salt
+     * @return string
      */
     public function getSalt()
     {
@@ -117,10 +101,8 @@ class User
     }
 
     /**
-     * Set ipAddress
-     *
      * @param int $ipAddress
-     * @return self
+     * @return $this
      */
     public function setIpAddress($ipAddress)
     {
@@ -129,9 +111,7 @@ class User
     }
 
     /**
-     * Get ipAddress
-     *
-     * @return int $ipAddress
+     * @return int
      */
     public function getIpAddress()
     {
@@ -139,10 +119,8 @@ class User
     }
 
     /**
-     * Set dateCreated
-     *
-     * @param int $dateCreated
-     * @return self
+     * @param \MongoTimestamp $dateCreated
+     * @return $this
      */
     public function setDateCreated($dateCreated)
     {
@@ -151,9 +129,7 @@ class User
     }
 
     /**
-     * Get dateCreated
-     *
-     * @return int $dateCreated
+     * @return \MongoTimestamp
      */
     public function getDateCreated()
     {

@@ -3,7 +3,7 @@
 namespace Augwa\ShortUrlBundle\Exception\User;
 
 /**
- * Class PasswordException
+ * Class PasswordMismatchException
  * @package Augwa\ShortUrlBundle\Exception\User
  */
 class PasswordException extends UserException {}

@@ -71,7 +71,6 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
         $stub
             ->method('emailRegistered')
             ->will($this->throwException(new ShortUrlBundle\Exception\User\DuplicateException));
-
         $stub->createAccount($this->data['email_address'], $this->data['password'], $this->data['ip_address']);
     }
 
@@ -111,7 +110,7 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
     private function getUserControllerStub(array $data)
     {
 
-        /** @var //ShortUrlBundle\Controller\UserController $stub */
+        /** @var ShortUrlBundle\Controller\UserController $stub */
         $stub = $this
             ->getMockBuilder('\Augwa\ShortUrlBundle\Controller\UserController')
             ->setMethods(

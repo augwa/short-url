@@ -1,1 +1,8 @@
 services:
+
+    AuthenticationCheck:
+        class: Augwa\APIBundle\Controller\AuthenticationController
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: authenticateAction }
+        calls:
+            - [ setContainer, ["@service_container"] ]
