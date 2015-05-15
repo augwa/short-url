@@ -12,12 +12,7 @@ app
         $stateProvider.state('urllist', {
             url: '/url/list',
             controller: 'UrlCtrl',
-            templateUrl: 'templates/url/list.html',
-            resolve: {
-                urlList: function(mySvc) {
-                    console.log(mySvc);
-                }
-            }
+            templateUrl: 'templates/url/list.html'
         })
     })
 
@@ -42,21 +37,6 @@ app
         $scope.error = null;
         $scope.response = null;
         $scope.location = $window.location;
-
-        $scope.urlList = function List($item, $event) {
-            $http.get(
-                '/api/url/list',
-                {
-                    page: $scope.page
-                }
-            ).success(function(data, status, headers, config) {
-                $scope.error = null;
-                $scope.response = data;
-            }).
-            error(function(data, status, headers, config) {
-                $scope.error = data;
-            });
-        };
 
         $scope.createSubmit = function Create($item, $event) {
             $http.post(
