@@ -41,7 +41,7 @@ class ExceptionController extends Base\BaseController
             'message' => $exception->getMessage(),
         ];
 
-        if ($unknownException || ($statusCode >= 500 && $statusCode <= 599 && false === in_array($statusCode, [ 501 ]))) {
+        if (($statusCode >= 500 && $statusCode <= 599 && false === in_array($statusCode, [ 501 ]))) {
 
             $referenceId = md5(time() . rand());
 
@@ -211,6 +211,12 @@ class ExceptionController extends Base\BaseController
         }
         elseif (is_subclass_of($exceptionClass, $serverPrefix . '\NetworkAuthenticationRequired')) {
             $statusCode = Response::HTTP_NETWORK_AUTHENTICATION_REQUIRED;
+        }
+        elseif (is_subclass_of($exceptionClass, $serverPrefix . '\NetworkAuthenticationRequired')) {
+            $statusCode = Response::HTTP_NETWORK_AUTHENTICATION_REQUIRED;
+        }
+        elseif ($exceptionClass === 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException') {
+            $statusCode = Response::HTTP_NOT_FOUND;
         }
 
         return $statusCode;

@@ -27,7 +27,7 @@ class UserControllerTest extends WebTestCase
         $client = static::createClient();
 
         $user = $this->getMock('\Augwa\ShortUrlBundle\Controller\UserController');
-        $client->getContainer()->set('Augwa.ShortURL.User', $user);
+        $client->getContainer()->set('Augwa.ShortURL.User.Factory', $user);
 
         $client->request(
             'POST',
@@ -205,6 +205,8 @@ class UserControllerTest extends WebTestCase
                 ]
             )
         );
+
+        $user = $this->getUserControllerStub($this->data);
 
         $json = json_decode($client->getResponse()->getContent());
 

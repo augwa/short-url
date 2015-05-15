@@ -19,8 +19,8 @@ class UrlController extends Base\BaseController
      * @param Request $request
      *
      * @return Response
-     * @throws \Augwa\APIBundle\Exception\User\MissingParameterException
-     * @throws \Augwa\APIBundle\Exception\User\InvalidDataException
+     * @throws \Augwa\APIBundle\Exception\Url\MissingParameterException
+     * @throws \Augwa\APIBundle\Exception\Url\InvalidDataException
      */
     public function createAction(Request $request)
     {
@@ -29,9 +29,15 @@ class UrlController extends Base\BaseController
 
         $arguments = json_decode($request->getContent(), false);
 
-        foreach([ 'url', 'title', 'description' ] as $requiredParameter) {
+        foreach([ 'url' ] as $requiredParameter) {
             if (false === isset($arguments->$requiredParameter)) {
-                throw new APIException\User\MissingParameterException(sprintf('%s parameter is missing', $requiredParameter));
+                throw new APIException\Url\MissingParameterException(sprintf('%s parameter is missing', $requiredParameter));
+            }
+        }
+
+        foreach([ 'title', 'description' ] as $param) {
+            if (false === isset($arguments->$param)) {
+                $arguments->$param = null;
             }
         }
 
@@ -57,7 +63,7 @@ class UrlController extends Base\BaseController
             $url = $url->createUrl($arguments->url, $arguments->title, $arguments->description, $request->getClientIp(), $user);
         }
         catch (ShortUrlException\Url\InvalidDataException $e) {
-            throw new APIException\User\InvalidDataException($e->getMessage(), $e->getCode(), $e);
+            throw new APIException\Url\InvalidDataException($e->getMessage(), $e->getCode(), $e);
         }
 
         $content = [
@@ -87,7 +93,7 @@ class UrlController extends Base\BaseController
      * @param Request $request
      *
      * @return Response
-     * @throws \Augwa\APIBundle\Exception\User\NotFoundException
+     * @throws \Augwa\APIBundle\Exception\Url\NotFoundException
      */
     public function readAction(Request $request)
     {
@@ -97,8 +103,8 @@ class UrlController extends Base\BaseController
         try {
             $url->loadById($url->getWebId($request->get('url_id')));
         }
-        catch (ShortUrlException\User\NotFoundException $e) {
-            throw new APIException\User\NotFoundException($e->getMessage(), $e->getCode(), $e);
+        catch (ShortUrlException\Url\NotFoundException $e) {
+            throw new APIException\Url\NotFoundException($e->getMessage(), $e->getCode(), $e);
         }
 
         $content = [
@@ -128,7 +134,7 @@ class UrlController extends Base\BaseController
      * @param Request $request
      *
      * @return Response
-     * @throws \Augwa\APIBundle\Exception\User\NotFoundException
+     * @throws \Augwa\APIBundle\Exception\Url\NotFoundException
      */
     public function deleteAction(Request $request)
     {
@@ -138,8 +144,8 @@ class UrlController extends Base\BaseController
         try {
             $url->loadById($url->getWebId($request->get('url_id')));
         }
-        catch (ShortUrlException\User\NotFoundException $e) {
-            throw new APIException\User\NotFoundException($e->getMessage(), $e->getCode(), $e);
+        catch (ShortUrlException\Url\NotFoundException $e) {
+            throw new APIException\Url\NotFoundException($e->getMessage(), $e->getCode(), $e);
         }
 
         $url->delete();
@@ -152,7 +158,7 @@ class UrlController extends Base\BaseController
     {
 
         if (null === $request->query->get('user_id')) {
-            throw new APIException\User\MissingParameterException('user_id parameter is missing');
+            throw new APIException\Url\MissingParameterException('user_id parameter is missing');
         }
 
         /** @var $user ShortUrl\UserController */

@@ -24,6 +24,13 @@ class UrlStatController extends Base\BaseController
         /** @var $urlStat ShortUrl\UrlStatController */
         $urlStat = $this->get('Augwa.ShortURL.UrlStat.Factory')->make();
 
+        try {
+            $url->loadById($url->getWebId($request->get('url_code')));
+        }
+        catch (ShortUrlException\Url\NotFoundException $e) {
+            throw new APIException\Url\NotFoundException($e->getMessage(), $e->getCode(), $e);
+        }
+
         $criteria = [
             'url.$id' => $url->getWebId($request->get('url_code'))
         ];

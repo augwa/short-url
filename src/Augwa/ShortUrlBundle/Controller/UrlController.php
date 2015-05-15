@@ -11,6 +11,8 @@ class UrlController extends Base\BaseController
     /** @var UserController|null */
     protected $user;
 
+    protected $baseChars = 'BDqClkwrh03jJdYRbLF49x2HS1yZMfcNv7PQ86XTgzpt5VnsmKWG';
+
     /**
      * @param Document\Url $document
      *
@@ -50,9 +52,9 @@ class UrlController extends Base\BaseController
     public function getWebId($id = null)
     {
         if ($id === null) {
-            return $this->base62_encode($this->getUrlId());
+            return $this->baseEncode($this->getUrlId());
         } else {
-            return $this->base62_decode($id);
+            return $this->baseDecode($id);
         }
     }
 
@@ -61,15 +63,15 @@ class UrlController extends Base\BaseController
      *
      * @return string
      */
-    private function base62_encode($num) {
-        $base = 'BDqClkwrUhI03jJdYRbLF49x2iHaS1yZAuMfEcNv7POQ86XTgzpt5VnosmKeWG';
+    private function baseEncode($num)
+    {
         $r = $num % 62;
-        $res = $base[$r];
+        $res = $this->baseChars[$r];
         $q = floor($num / 62);
         while ($q) {
             $r = $q % 62;
             $q = floor($q / 62);
-            $res = $base[$r] . $res;
+            $res = $this->baseChars[$r] . $res;
         }
         return $res;
     }
@@ -79,12 +81,12 @@ class UrlController extends Base\BaseController
      *
      * @return bool|int
      */
-    private function base62_decode($num) {
-        $base = 'BDqClkwrUhI03jJdYRbLF49x2iHaS1yZAuMfEcNv7POQ86XTgzpt5VnosmKeWG';
+    private function baseDecode($num)
+    {
         $limit = strlen($num);
-        $res = strpos($base, $num[0]);
+        $res = strpos($this->baseChars, $num[0]);
         for($i = 1; $i < $limit; $i++) {
-            $res = 62 * $res + strpos($base, $num[$i]);
+            $res = 62 * $res + strpos($this->baseChars, $num[$i]);
         }
         return (int)$res;
     }
@@ -259,7 +261,7 @@ class UrlController extends Base\BaseController
         $ipAddress = ip2long($ipAddress);
 
         if (false === filter_var($fullUrl, FILTER_VALIDATE_URL)) {
-            throw new Exception\User\InvalidDataException('fullUrl is not a valid url');
+            throw new Exception\Url\InvalidDataException('fullUrl is not a valid url');
         }
 
         /** @var $url UrlController */
@@ -341,7 +343,7 @@ class UrlController extends Base\BaseController
         );
 
         if ($url === null) {
-            throw new Exception\Url\NotFoundException(sprintf('url with id "%s" was not found', $this->base62_encode($id)));
+            throw new Exception\Url\NotFoundException(sprintf('url with id "%s" was not found', $this->baseEncode($id)));
         }
 
         return $url;
