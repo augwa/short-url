@@ -45,7 +45,7 @@ app
 
         $scope.urlList = function List($item, $event) {
             $http.get(
-                '/app_dev.php/api/url/list',
+                '/api/url/list',
                 {
                     page: $scope.page
                 }
@@ -60,7 +60,7 @@ app
 
         $scope.createSubmit = function Create($item, $event) {
             $http.post(
-                '/app_dev.php/api/url',
+                '/api/url',
                 {
                     url: $scope.full_url,
                     title: $scope.title,
